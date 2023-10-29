@@ -21,6 +21,11 @@ def generate_note_code():
     import uuid
     return str(uuid.uuid4())[:6]
 
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
 # Create a new note
 @app.route('/create', methods=['GET', 'POST'])
 def create_note():
@@ -39,43 +44,36 @@ def create_note():
     return render_template('create_note.html')
 
 # Retrieve a note by code
-@app.route('/<code>')
-def get_note(code):
+@app.route('/view')
+def view_note():
+    code = request.args.get('code')
     conn = sqlite3.connect('notes.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM notes WHERE code = ?', (code,))
     note = cursor.fetchone()
     conn.close()
-    
+
     if note:
-        return render_template('note.html', note=note)
+        return render_template('view_note.html', note=note)
     else:
         return 'Note not found', 404
 
+
 # Edit a note by code
-@app.route('/edit/<code>', methods=['GET', 'POST'])
-def edit_note(code):
-    if request.method == 'GET':
-        conn = sqlite3.connect('notes.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM notes WHERE code = ?', (code,))
-        note = cursor.fetchone()
-        conn.close()
+@app.route('/edit')
+def edit_note():
+    code = request.args.get('code')
+    conn = sqlite3.connect('notes.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM notes WHERE code = ?', (code,))
+    note = cursor.fetchone()
+    conn.close()
 
-        if note:
-            return render_template('edit_note.html', note=note)
-        else:
-            return 'Note not found', 404
-    elif request.method == 'POST':
-        content = request.form['content']
-        
-        conn = sqlite3.connect('notes.db')
-        cursor = conn.cursor()
-        cursor.execute('UPDATE notes SET content = ? WHERE code = ?', (content, code))
-        conn.commit()
-        conn.close()
+    if note:
+        return render_template('edit_note.html', note=note)
+    else:
+        return 'Note not found', 404
 
-        return redirect(url_for('get_note', code=code))
 
 if __name__ == '__main__':
     app.run(debug=True)
