@@ -1,8 +1,11 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, session, flash
+from flask.helpers import get_flashed_messages
 import sqlite3
 import uuid
 
 app = Flask(__name__)
+app.secret_key = 'YUFGf74uyG76 TFr78TY0JYG5'
+
 
 # Create a new SQLite database or connect to an existing one
 conn = sqlite3.connect('notes.db')
@@ -62,21 +65,45 @@ def view_note():
     if note:
         return render_template('view_note.html', note=note)
     else:
-        return 'Note not found', 404
+        flash("NO NOTE WITH THAT ID")
+        return redirect(url_for('home'))
+        
 
-@app.route('/edit')
+@app.route('/edit', methods=['GET', 'POST'])
 def edit_note():
-    code = request.args.get('code')
-    conn = sqlite3.connect('notes.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM notes WHERE code = ?', (code,))
-    note = cursor.fetchone()
-    conn.close()
+    if request.method == 'GET':
+        code = request.args.get('code')
+        conn = sqlite3.connect('notes.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM notes WHERE code = ?', (code,))
+        note = cursor.fetchone()
+        conn.close()
 
-    if note:
-        return render_template('edit_note.html', note=note)
-    else:
-        return 'Note not found', 404
+        if note:
+            # Store the 'code' value in the session
+            session['code'] = code
+            return render_template('edit_note.html', note=note)
+        else:
+            return 'Note not found', 404
+    elif request.method == 'POST':
+        # Retrieve the 'code' value from the session
+        code = session.get('code')
+        if code is None:
+            return 'Note not found', 404
+
+        # Handle the POST request to save the edited note
+        content = request.form['content']
+        
+        conn = sqlite3.connect('notes.db')
+        cursor = conn.cursor()
+        cursor.execute('UPDATE notes SET content = ? WHERE code = ?', (content, code))
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('view_note', code=code))  # Redirect to the view page after saving
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

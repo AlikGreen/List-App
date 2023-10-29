@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <title>Note-Taking App</title>
 </head>
 <body>
-    <h1>Welcome to the Note-Taking App</h1>
-    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="container"><h2 class="flash" {% if category == 'error' %} class="error" {% endif %}>{{ message }}</h2></div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <h1>Note App</h1>
+
     <h2>View a Note</h2>
     <form action="/view" method="get">
     <label for="view-code">Enter Note Code:</label>
     <input type="text" id="view-code" name="code" required>
     <button type="submit">View</button>
     </form>
-
-    
-    <h2>Edit a Note</h2>
-    <form action="/edit" method="get">
-        <label for="edit-code">Enter Note Code:</label>
-        <input type="text" id="edit-code" name="code" required>
-        <button type="submit">Edit</button>
-    </form>
-    
-
     
     <h2>Create a New Note</h2>
     <form action="/create" method="get">
@@ -30,3 +27,4 @@
     </form>
 </body>
 </html>
+

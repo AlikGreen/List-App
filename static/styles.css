@@ -7,6 +7,7 @@ body{
 }
 
 h1{
+    padding-top: 40px;
     text-align: center;
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 72px;
@@ -28,7 +29,7 @@ textarea{
     color: azure;
 }
 
-input, button, a{
+input, button{
     margin-top: 10px;
     font-family: 'Patua One', sans-serif;
     font-weight: 500;
@@ -41,6 +42,7 @@ input, button, a{
     margin-left: auto;
     margin-right: auto;
 
+    text-align: center;
     background-color: rgb(95, 95, 95);
 
     color: rgb(237, 237, 237);
@@ -49,9 +51,26 @@ input, button, a{
     transition: 0.3s;
 }
 
-input:hover, button:hover, a:hover{
+input:hover, button:hover{
     background-color: rgb(103, 103, 103);
     scale: 1.1;
+}
+
+.error {
+    background-color: #FF5733; /* Set the background color for error messages */
+    color: white; /* Set the text color for error messages */
+    padding: 10px; /* Add padding for spacing within error messages */
+    text-align: center; /* Center text within error messages */
+}
+
+.container {
+    top: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 8px;
+    margin: 0 0; /* Center the container horizontally */ /* Add padding for spacing within the container */
+    background-color: red;
 }
 
 p, h2, label{
@@ -63,3 +82,4 @@ p, h2, label{
     text-align: center;
     color: rgb(226, 226, 226);
 }
+
