@@ -28,7 +28,7 @@ textarea{
     color: azure;
 }
 
-input, button{
+input, button, a{
     margin-top: 10px;
     font-family: 'Patua One', sans-serif;
     font-weight: 500;
@@ -49,7 +49,7 @@ input, button{
     transition: 0.3s;
 }
 
-input:hover, button:hover{
+input:hover, button:hover, a:hover{
     background-color: rgb(103, 103, 103);
     scale: 1.1;
 }
