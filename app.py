@@ -1,9 +1,10 @@
 from flask import Flask, request, render_template, redirect, url_for
 import sqlite3
+import uuid
 
 app = Flask(__name__)
 
-# Database setup
+# Create a new SQLite database or connect to an existing one
 conn = sqlite3.connect('notes.db')
 cursor = conn.cursor()
 cursor.execute('''
@@ -16,17 +17,23 @@ cursor.execute('''
 conn.commit()
 conn.close()
 
-# Function to generate a unique note code (you can improve this logic)
+# Function to generate a unique note code
 def generate_note_code():
-    import uuid
-    return str(uuid.uuid4())[:6]
+    while True:
+        code = str(uuid.uuid4())[:6]
+        # Check if the code already exists in the database
+        conn = sqlite3.connect('notes.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT code FROM notes WHERE code = ?', (code,))
+        existing_code = cursor.fetchone()
+        conn.close()
+        if not existing_code:
+            return code
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-
-# Create a new note
 @app.route('/create', methods=['GET', 'POST'])
 def create_note():
     if request.method == 'POST':
@@ -39,11 +46,10 @@ def create_note():
         conn.commit()
         conn.close()
         
-        return redirect(url_for('get_note', code=code))
+        return redirect(url_for('view_note', code=code))
     
     return render_template('create_note.html')
 
-# Retrieve a note by code
 @app.route('/view')
 def view_note():
     code = request.args.get('code')
@@ -58,8 +64,6 @@ def view_note():
     else:
         return 'Note not found', 404
 
-
-# Edit a note by code
 @app.route('/edit')
 def edit_note():
     code = request.args.get('code')
@@ -73,7 +77,6 @@ def edit_note():
         return render_template('edit_note.html', note=note)
     else:
         return 'Note not found', 404
-
 
 if __name__ == '__main__':
     app.run(debug=True)
