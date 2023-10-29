@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
+
+body{
+    background-color: rgb(23, 23, 23);
+    height: 100%;
+}
+
+h1{
+    text-align: center;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 72px;
+    background: -webkit-linear-gradient(90deg, rgba(57,132,149,1) 0%, rgba(18,162,118,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+textarea{
+    font-family: 'Patua One', sans-serif;
+    font-size: 24px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(75, 75, 75);
+    border-radius: 10px;
+    width: 60%;
+    caret-color: aliceblue;
+    color: azure;
+}
+
+input{
+    font-family: 'Patua One', sans-serif;
+    font-weight: 500;
+    border-radius: 10px;
+    font-size: 36px;
+
+    border-width: 0px;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: rgb(95, 95, 95);
+
+    color: rgb(237, 237, 237);
+    scale: 1;
+
+    transition: 0.3s;
+}
+
+input:hover{
+    background-color: rgb(103, 103, 103);
+    scale: 1.1;
+}
+
+p{
+    font-family: 'Patua One', sans-serif;
+    font-size: 24px;
+    text-align: center;
+    color: rgb(226, 226, 226);
+}
